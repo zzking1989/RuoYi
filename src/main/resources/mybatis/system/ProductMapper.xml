@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.product.dao.IProductDao">
+
+	<resultMap type="com.ruoyi.project.system.product.domain.Product" id="ProductResult">
+		<id     property="productId"       column="product_id"        />
+		<result property="productName"     column="product_name"      />
+		<result property="productSort"      column="product_sort"       />
+		<result property="productAttribute"  column="product_attribute"  />
+		<result property="createBy"     column="create_by"      />
+		<result property="createTime"   column="create_time"    />
+		<result property="updateBy"     column="update_by"      />
+		<result property="updateTime"   column="update_time"    />
+		<result property="remark"       column="remark"         />
+	</resultMap>
+
+	<select id="selectProductAll" resultMap="ProductResult">
+		SELECT product_id, product_name, product_sort, product_attribute, create_by, create_time, update_by, update_time, remark from sys_product ORDER BY product_sort DESC
+	</select>
+	
+	<select id="selectProductById" parameterType="Long" resultMap="ProductResult">
+		select product_id, product_name, product_sort, product_attribute, create_by, create_time, update_by, update_time, remark
+		from sys_product u
+		where u.product_id = #{productId}
+	</select>
+	
+	<delete id="deleteProductById" parameterType="Long">
+ 		delete from sys_product where product_id = #{productId}
+ 	</delete>
+ 	
+ 	<delete id="batchDeleteProduct" parameterType="String">
+ 		delete from sys_product where product_id in
+ 		<foreach collection="array" item="productId" open="(" separator="," close=")">
+ 			#{productId}
+        </foreach> 
+ 	</delete>
+ 	
+ 	<update id="updateProduct" parameterType="Product">
+ 		update sys_product
+ 		<set>
+ 			<if test="productName != null and productName != ''">product_name = #{productName},</if>
+ 			<if test="productSort != null and productSort !=0">product_sort = #{productSort},</if>
+ 			<if test="productAttribute != null and productAttribute != ''">product_attribute = #{productAttribute},</if>
+ 			<if test="remark != null and remark != ''">remark = #{remark},</if>
+ 			<if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+ 			update_time = sysdate()
+ 		</set>
+ 		where 1=1
+ 		<if test="productId != null">and product_id = #{productId}</if>
+	</update>
+ 	
+ 	<insert id="insertProduct" parameterType="Product" useGeneratedKeys="true" keyProperty="productId">
+ 		insert into sys_product(
+ 			<if test="productId != null and productId != 0">product_id,</if>
+			<if test="productName != null and productName != ''">product_name,</if>
+			<if test="productSort != null and productSort !=0">product_sort,</if>
+			<if test="productAttribute != null and productAttribute != ''">product_attribute,</if>
+ 			<if test="remark != null and remark != ''">remark,</if>
+ 			<if test="createBy != null and createBy != ''">create_by,</if>
+ 			create_time
+ 		)values(
+			<if test="productId != null and productId != 0">#{productId},</if>
+			<if test="productName != null and productName != ''">#{productName},</if>
+			<if test="productSort != null and productSort !=0">#{productSort},</if>
+			<if test="productAttribute != null and productAttribute != ''">#{productAttribute},</if>
+			<if test="remark != null and remark != ''">#{remark},</if>
+			<if test="createBy != null and createBy != ''">#{createBy},</if>
+ 			sysdate()
+ 		)
+	</insert>
+	
+</mapper> 
