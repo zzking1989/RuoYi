@@ -6,15 +6,15 @@
 <body class="gray-bg">
 	<div class="wrapper wrapper-content">
 		<div class="btn-group hidden-xs" id="tableToolbar" role="group">
-			<button type="button" class="btn btn-outline btn-default" th:onclick="'javascript:add()'" shiro:hasPermission="system:role:add">
+			<button type="button" class="btn btn-outline btn-default" th:onclick="'javascript:add()'" shiro:hasPermission="system:product:add">
                 <i class="glyphicon glyphicon-plus"></i>
             </button>
-			<button type="button" class="btn btn-outline btn-default" th:onclick="'javascript:batchRemove()'" shiro:hasPermission="system:role:batchRemove">
+			<button type="button" class="btn btn-outline btn-default" th:onclick="'javascript:batchRemove()'" shiro:hasPermission="system:product:batchRemove">
 	            <i class="glyphicon glyphicon-trash"></i>
 	        </button>
         </div>
 		<table class="bootstrap-table" data-mobile-responsive="true" 
-			   data-sort-name="role_sort" data-sort-order="asc">
+			   data-sort-name="product_sort" data-sort-order="asc">
 		</table>
 	</div>
 	<div th:include="include :: footer"></div>

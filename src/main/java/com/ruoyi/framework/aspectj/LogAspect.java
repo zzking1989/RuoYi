@@ -2,6 +2,7 @@ package com.ruoyi.framework.aspectj;
 
 import java.lang.reflect.Method;
 import java.util.Map;
+
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -24,14 +25,13 @@ import com.ruoyi.project.system.user.domain.User;
 
 /**
  * 操作日志记录处理
- * 
+ *
  * @author ruoyi
  */
 
 @Aspect
 @Component
-public class LogAspect
-{
+public class LogAspect {
     private static final Logger log = LoggerFactory.getLogger(LogAspect.class);
 
     @Autowired
@@ -39,8 +39,7 @@ public class LogAspect
 
     // 配置织入点
     @Pointcut("@annotation(com.ruoyi.framework.aspectj.lang.annotation.Log)")
-    public void logPointCut()
-    {
+    public void logPointCut() {
     }
 
     /**
@@ -49,31 +48,26 @@ public class LogAspect
      * @param joinPoint 切点
      */
     @AfterReturning(pointcut = "logPointCut()")
-    public void doBefore(JoinPoint joinPoint)
-    {
+    public void doBefore(JoinPoint joinPoint) {
         handleLog(joinPoint, null);
     }
 
     /**
      * 拦截异常操作
-     * 
+     *
      * @param joinPoint
      * @param e
      */
     @AfterThrowing(value = "logPointCut()", throwing = "e")
-    public void doAfter(JoinPoint joinPoint, Exception e)
-    {
+    public void doAfter(JoinPoint joinPoint, Exception e) {
         handleLog(joinPoint, e);
     }
 
-    private void handleLog(JoinPoint joinPoint, Exception e)
-    {
-        try
-        {
+    private void handleLog(JoinPoint joinPoint, Exception e) {
+        try {
             // 获得注解
             Log controllerLog = getAnnotationLog(joinPoint);
-            if (controllerLog == null)
-            {
+            if (controllerLog == null) {
                 return;
             }
 
@@ -87,14 +81,12 @@ public class LogAspect
             String ip = ShiroUtils.getIp();
             operLog.setOperIp(ip);
             operLog.setOperUrl(ServletUtils.getHttpServletRequest().getRequestURI());
-            if (currentUser != null)
-            {
+            if (currentUser != null) {
                 operLog.setLoginName(currentUser.getLoginName());
                 operLog.setDeptName(currentUser.getDept().getDeptName());
             }
 
-            if (e != null)
-            {
+            if (e != null) {
                 operLog.setStatus(UserConstants.EXCEPTION);
                 operLog.setErrorMsg(e.getMessage().substring(0, 2000));
             }
@@ -106,9 +98,7 @@ public class LogAspect
             getControllerMethodDescription(controllerLog, operLog);
             // 保存数据库
             operLogService.insertOperlog(operLog);
-        }
-        catch (Exception exp)
-        {
+        } catch (Exception exp) {
             // 记录本地异常日志
             log.error("==前置通知异常==");
             log.error("异常信息:{}", exp.getMessage());
@@ -118,13 +108,12 @@ public class LogAspect
 
     /**
      * 获取注解中对方法的描述信息 用于Controller层注解
-     * 
+     *
      * @param joinPoint 切点
      * @return 方法描述
      * @throws Exception
      */
-    public static void getControllerMethodDescription(Log log, OperLog operLog) throws Exception
-    {
+    public static void getControllerMethodDescription(Log log, OperLog operLog) throws Exception {
         // 设置action动作
         operLog.setAction(log.action());
         // 设置标题
@@ -132,8 +121,7 @@ public class LogAspect
         // 设置channel
         operLog.setChannel(log.channel());
         // 是否需要保存request，参数和值
-        if (log.isSaveRequestData())
-        {
+        if (log.isSaveRequestData()) {
             // 获取参数的信息，传入到数据库中。
             setRequestValue(operLog);
         }
@@ -141,12 +129,11 @@ public class LogAspect
 
     /**
      * 获取请求的参数，放到log中
-     * 
+     *
      * @param operLog
      * @param request
      */
-    private static void setRequestValue(OperLog operLog)
-    {
+    private static void setRequestValue(OperLog operLog) {
         Map<String, String[]> map = ServletUtils.getHttpServletRequest().getParameterMap();
         String params = JSONObject.toJSONString(map);
         operLog.setOperParam(params.substring(0, 255));
@@ -155,14 +142,12 @@ public class LogAspect
     /**
      * 是否存在注解，如果存在就获取
      */
-    private static Log getAnnotationLog(JoinPoint joinPoint) throws Exception
-    {
+    private static Log getAnnotationLog(JoinPoint joinPoint) throws Exception {
         Signature signature = joinPoint.getSignature();
         MethodSignature methodSignature = (MethodSignature) signature;
         Method method = methodSignature.getMethod();
 
-        if (method != null)
-        {
+        if (method != null) {
             return method.getAnnotation(Log.class);
         }
         return null;
