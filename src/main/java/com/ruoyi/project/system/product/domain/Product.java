@@ -1,17 +1,23 @@
 package com.ruoyi.project.system.product.domain;
 
 import com.ruoyi.framework.web.page.PageDomain;
+import jdk.nashorn.internal.objects.annotations.Constructor;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Arrays;
 import java.util.Date;
 
 /**
  * 角色对象 sys_role
- * 
+ *
  * @author ruoyi
  */
-public class Product extends PageDomain
-{
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Product extends PageDomain {
     /**
      * 产品id
      */
@@ -23,7 +29,7 @@ public class Product extends PageDomain
     /**
      * 显示顺序
      */
-    private  int productSort;
+    private int productSort;
     /**
      * 产品属性
      */
@@ -49,77 +55,6 @@ public class Product extends PageDomain
      */
     private String remark;
 
-    public Long getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Long productId) {
-        this.productId = productId;
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
-    public int getProductSort() {
-        return productSort;
-    }
-
-    public void setProductSort(int productSort) {
-        this.productSort = productSort;
-    }
-
-    public String getProductAttribute() {
-        return productAttribute;
-    }
-
-    public void setProductAttribute(String productAttribute) {
-        this.productAttribute = productAttribute;
-    }
-
-    public String getCreateBy() {
-        return createBy;
-    }
-
-    public void setCreateBy(String createBy) {
-        this.createBy = createBy;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public String getUpdateBy() {
-        return updateBy;
-    }
-
-    public void setUpdateBy(String updateBy) {
-        this.updateBy = updateBy;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
 
     @Override
     public String toString() {

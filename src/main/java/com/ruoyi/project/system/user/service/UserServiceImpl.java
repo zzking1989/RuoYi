@@ -19,68 +19,62 @@ import com.ruoyi.project.system.user.domain.UserRole;
 
 /**
  * 用户 业务层处理
- * 
+ *
  * @author ruoyi
  */
 @Service("userService")
-public class UserServiceImpl implements IUserService
-{
+public class UserServiceImpl implements IUserService {
 
     @Autowired
     private IUserDao userDao;
-    
+
     @Autowired
     private IUserPostDao userPostDao;
-    
+
     @Autowired
     private IUserRoleDao userRoleDao;
 
     /**
      * 根据条件分页查询用户对象
-     * 
+     *
      * @param user 用户信息
-     * 
      * @return 用户信息集合信息
      */
     @Override
-    public List<User> selectUserList(User user)
-    {
+    public List<User> selectUserList(User user) {
         return userDao.selectUserList(user);
     }
 
     /**
      * 通过用户名查询用户
-     * 
+     *
      * @param userName 用户名
      * @return 用户对象信息
      */
     @Override
-    public User selectUserByName(String userName)
-    {
+    public User selectUserByName(String userName) {
         return userDao.selectUserByName(userName);
     }
 
     /**
      * 通过用户ID查询用户
-     * 
+     *
      * @param userId 用户ID
      * @return 用户对象信息
      */
     @Override
-    public User selectUserById(Long userId)
-    {
+    public User selectUserById(Long userId) {
         return userDao.selectUserById(userId);
     }
 
     /**
      * 通过用户ID删除用户
-     * 
+     *
      * @param userId 用户ID
      * @return 结果
      */
     @Override
-    public int deleteUserById(Long userId)
-    {
+    public int deleteUserById(Long userId) {
         // 删除用户与角色关联
         userRoleDao.deleteUserRoleByUserId(userId);
         return userDao.deleteUserById(userId);
@@ -88,31 +82,28 @@ public class UserServiceImpl implements IUserService
 
     /**
      * 批量删除用户信息
-     * 
+     *
      * @param ids 需要删除的数据ID
      * @return 结果
      */
     @Override
-    public int batchDeleteUser(Long[] ids)
-    {
+    public int batchDeleteUser(Long[] ids) {
         return userDao.batchDeleteUser(ids);
     }
 
     /**
      * 保存用户信息
-     * 
+     *
      * @param user 用户信息
      * @return 结果
      */
     @Override
-    public int saveUser(User user)
-    {
+    public int saveUser(User user) {
         int count = 0;
         Long userId = user.getUserId();
         String password = new PasswordService().encryptPassword(user.getLoginName(), user.getPassword(), "");
         user.setPassword(password);
-        if (StringUtils.isNotNull(userId))
-        {
+        if (StringUtils.isNotNull(userId)) {
             user.setUpdateBy(ShiroUtils.getLoginName());
             // 修改用户信息
             count = userDao.updateUser(user);
@@ -125,9 +116,7 @@ public class UserServiceImpl implements IUserService
             // 新增用户与岗位管理
             insertUserPost(user);
 
-        }
-        else
-        {
+        } else {
             user.setCreateBy(ShiroUtils.getLoginName());
             // 新增用户信息
             count = userDao.insertUser(user);
@@ -141,13 +130,12 @@ public class UserServiceImpl implements IUserService
 
     /**
      * 修改用户信息
-     * 
+     *
      * @param user 用户信息
      * @return 结果
      */
     @Override
-    public int updateUser(User user)
-    {
+    public int updateUser(User user) {
         String password = new PasswordService().encryptPassword(user.getLoginName(), user.getPassword(), "");
         user.setPassword(password);
         return userDao.updateUser(user);
@@ -155,60 +143,52 @@ public class UserServiceImpl implements IUserService
 
     /**
      * 新增用户角色信息
-     * 
+     *
      * @param user 用户对象
      */
-    public void insertUserRole(User user)
-    {
+    public void insertUserRole(User user) {
         // 新增用户与角色管理
         List<UserRole> list = new ArrayList<UserRole>();
-        for (Long roleId : user.getRoleIds())
-        {
+        for (Long roleId : user.getRoleIds()) {
             UserRole ur = new UserRole();
             ur.setUserId(user.getUserId());
             ur.setRoleId(roleId);
             list.add(ur);
         }
-        if (list.size() > 0)
-        {
+        if (list.size() > 0) {
             userRoleDao.batchUserRole(list);
         }
     }
 
     /**
      * 新增用户岗位信息
-     * 
+     *
      * @param user 用户对象
      */
-    public void insertUserPost(User user)
-    {
+    public void insertUserPost(User user) {
         // 新增用户与岗位管理
         List<UserPost> list = new ArrayList<UserPost>();
-        for (Long postId : user.getPostIds())
-        {
+        for (Long postId : user.getPostIds()) {
             UserPost up = new UserPost();
             up.setUserId(user.getUserId());
             up.setPostId(postId);
             list.add(up);
         }
-        if (list.size() > 0)
-        {
+        if (list.size() > 0) {
             userPostDao.batchUserPost(list);
         }
     }
 
     /**
      * 校验用户名称是否唯一
-     * 
+     *
      * @param userName 用户名
      * @return
      */
     @Override
-    public String checkNameUnique(String loginName)
-    {
+    public String checkNameUnique(String loginName) {
         int count = userDao.checkNameUnique(loginName);
-        if (count > 0)
-        {
+        if (count > 0) {
             return UserConstants.NAME_NOT_UNIQUE;
         }
         return UserConstants.NAME_UNIQUE;

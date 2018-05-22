@@ -9,14 +9,14 @@ import java.util.List;
 
 /**
  * 产品 业务层处理
- * 
+ *
  * @author ruoyi
  */
 @Service("productService")
-public class ProductServiceImpl implements IProductService
-{
+public class ProductServiceImpl implements IProductService {
     @Autowired
     private IProductDao productDao;
+
     @Override
     public List<Product> selectProductAll() {
         return productDao.selectProductAll();
@@ -39,6 +39,7 @@ public class ProductServiceImpl implements IProductService
 
     @Override
     public int saveProduct(Product product) {
+
         return 0;
     }
 }
