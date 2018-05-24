@@ -1,6 +1,7 @@
 package com.ruoyi.project.system.user.controller;
 
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,22 +14,22 @@ import com.ruoyi.project.system.user.domain.User;
 
 /**
  * 首页 业务处理
- * 
+ *
  * @author ruoyi
  */
 @Controller
-public class IndexController extends BaseController
-{
+public class IndexController extends BaseController {
     @Autowired
     private IMenuService menuService;
 
     @Autowired
     private RuoYiConfig ruoYiConfig;
 
+
+
     // 系统首页
     @GetMapping("/index")
-    public String index(Model model)
-    {
+    public String index(Model model) {
         // 取身份信息
         User user = getUser();
         // 根据用户id取出菜单
@@ -41,9 +42,10 @@ public class IndexController extends BaseController
 
     // 系统介绍
     @GetMapping("/system/main")
-    public String main(Model model)
-    {
+    public String main(Model model) {
+        User user = getUser();
         model.addAttribute("version", ruoYiConfig.getVersion());
+        model.addAttribute("user", user);
         return "main";
     }
 
