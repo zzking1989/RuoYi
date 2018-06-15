@@ -14,50 +14,47 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
  * 角色信息
- * 
+ *
  * @author ruoyi
  */
 @Controller
 @RequestMapping("/system/product")
-public class ProductController extends BaseController
-{
+public class ProductController extends BaseController {
 
     private String prefix = "system/product";
 
     @Autowired
     private IProductService productService;
-    
+
     @RequiresPermissions("system:product:view")
     @GetMapping()
-    public String product()
-    {
+    public String product() {
         return prefix + "/product";
     }
 
     @RequiresPermissions("system:product:list")
     @GetMapping("/list")
     @ResponseBody
-    public TableDataInfo list(Product product)
-    {
+    public TableDataInfo list(Product product) {
         setPageInfo(product);
         List<Product> list = productService.selectProductAll();
         System.out.println(list);
         return getDataTable(list);
     }
-    
+
     /**
-     *
      * 新增角色
      */
     @RequiresPermissions("system:product:add")
     @Log(title = "系统管理", action = "产品管理-新增产品")
     @GetMapping("/add")
-    public String add(Model model)
-    {
+    public String add(Model model) {
         return prefix + "/add";
     }
 
@@ -67,8 +64,7 @@ public class ProductController extends BaseController
     @RequiresPermissions("system:product:edit")
     @Log(title = "系统管理", action = "产品管理-修改产品")
     @GetMapping("/edit/{roleId}")
-    public String edit(@PathVariable("roleId") Long productId, Model model)
-    {
+    public String edit(@PathVariable("roleId") Long productId, Model model) {
         Product product = productService.selectProductById(productId);
         model.addAttribute("product", product);
         return prefix + "/edit";
@@ -81,10 +77,11 @@ public class ProductController extends BaseController
     @Log(title = "系统管理", action = "产品管理-保存产品")
     @PostMapping("/save")
     @ResponseBody
-    public JSON save(Product product)
-    {
-        if (productService.saveProduct(product) > 0)
-        {
+    public JSON save(Product product, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        String username = (String) session.getAttribute("username");
+        product.setCreateBy(username);
+        if (productService.saveProduct(product) > 0) {
             return JSON.ok();
         }
         return JSON.error();
@@ -94,15 +91,12 @@ public class ProductController extends BaseController
     @Log(title = "系统管理", action = "产品管理-删除产品")
     @RequestMapping("/remove/{roleId}")
     @ResponseBody
-    public JSON remove(@PathVariable("roleId") Long productId)
-    {
+    public JSON remove(@PathVariable("roleId") Long productId) {
         Product product = productService.selectProductById(productId);
-        if (product == null)
-        {
+        if (product == null) {
             return JSON.error("产品不存在");
         }
-        if (productService.deleteProductById(productId) > 0)
-        {
+        if (productService.deleteProductById(productId) > 0) {
             return JSON.ok();
         }
         return JSON.error();
@@ -112,11 +106,9 @@ public class ProductController extends BaseController
     @Log(title = "系统管理", action = "产品管理-批量删除")
     @PostMapping("/batchRemove")
     @ResponseBody
-    public JSON batchRemove(@RequestParam("ids[]") Long[] ids)
-    {
+    public JSON batchRemove(@RequestParam("ids[]") Long[] ids) {
         int rows = productService.batchDeleteProduct(ids);
-        if (rows > 0)
-        {
+        if (rows > 0) {
             return JSON.ok();
         }
         return JSON.error();
@@ -126,8 +118,7 @@ public class ProductController extends BaseController
      * 选择菜单树
      */
     @GetMapping("/selectMenuTree")
-    public String selectMenuTree()
-    {
+    public String selectMenuTree() {
         return prefix + "/tree";
     }
 

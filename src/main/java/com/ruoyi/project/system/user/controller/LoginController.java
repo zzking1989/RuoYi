@@ -4,6 +4,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,38 +13,37 @@ import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.framework.web.controller.BaseController;
 import com.ruoyi.framework.web.domain.JSON;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 /**
  * 登录验证
- * 
+ *
  * @author ruoyi
  */
 // @RestController
 @Controller
-public class LoginController extends BaseController
-{
+public class LoginController extends BaseController {
 
     @GetMapping("/login")
-    public String login()
-    {
+    public String login() {
         return "login";
     }
 
     @PostMapping("/login")
     @ResponseBody
-    public JSON ajaxLogin(String username, String password)
-    {
+    public JSON ajaxLogin(String username, String password, HttpServletRequest request) {
         UsernamePasswordToken token = new UsernamePasswordToken(username, password);
         Subject subject = SecurityUtils.getSubject();
-        try
-        {
+        try {
             subject.login(token);
+            HttpSession session = request.getSession();
+            session.setAttribute("username", username);
+
             return JSON.ok();
-        }
-        catch (AuthenticationException e)
-        {
+        } catch (AuthenticationException e) {
             String msg = "用户或密码错误";
-            if (StringUtils.isNotEmpty(e.getMessage()))
-            {
+            if (StringUtils.isNotEmpty(e.getMessage())) {
                 msg = e.getMessage();
             }
             return JSON.error(msg);
@@ -51,8 +51,7 @@ public class LoginController extends BaseController
     }
 
     @GetMapping("/unauth")
-    public String unauth()
-    {
+    public String unauth() {
         return "/error/unauth";
     }
 }

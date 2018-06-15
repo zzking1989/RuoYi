@@ -2,10 +2,14 @@ package com.ruoyi.project.system.product.service;
 
 import com.ruoyi.project.system.product.dao.IProductDao;
 import com.ruoyi.project.system.product.domain.Product;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import org.slf4j.Logger;
+
 
 /**
  * 产品 业务层处理
@@ -37,9 +41,12 @@ public class ProductServiceImpl implements IProductService {
         return 0;
     }
 
+    private static Logger LOGGER = LoggerFactory.getLogger(ProductServiceImpl.class);
+
     @Override
     public int saveProduct(Product product) {
-
-        return 0;
+        int count = 0;
+        count = productDao.insertProduct(product);
+        return count;
     }
 }

@@ -27,10 +27,6 @@ public class Product extends PageDomain {
      */
     private String productName;
     /**
-     * 显示顺序
-     */
-    private int productSort;
-    /**
      * 产品属性
      */
     private String productAttribute;
@@ -61,7 +57,6 @@ public class Product extends PageDomain {
         return "Product{" +
                 "productId=" + productId +
                 ", productName='" + productName + '\'' +
-                ", productSort=" + productSort +
                 ", productAttribute='" + productAttribute + '\'' +
                 ", createBy='" + createBy + '\'' +
                 ", createTime=" + createTime +
