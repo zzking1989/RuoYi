@@ -21,6 +21,8 @@ public class ProductServiceImpl implements IProductService {
     @Autowired
     private IProductDao productDao;
 
+    private static Logger LOGGER = LoggerFactory.getLogger(ProductServiceImpl.class);
+
     @Override
     public List<Product> selectProductAll() {
         return productDao.selectProductAll();
@@ -33,7 +35,9 @@ public class ProductServiceImpl implements IProductService {
 
     @Override
     public int deleteProductById(Long productId) {
-        return 0;
+        int count = 0;
+        count = productDao.deleteProductById(productId);
+        return count;
     }
 
     @Override
@@ -41,7 +45,6 @@ public class ProductServiceImpl implements IProductService {
         return 0;
     }
 
-    private static Logger LOGGER = LoggerFactory.getLogger(ProductServiceImpl.class);
 
     @Override
     public int saveProduct(Product product) {

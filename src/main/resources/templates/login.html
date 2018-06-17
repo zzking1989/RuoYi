@@ -16,19 +16,23 @@
     <![endif]-->
     <link rel="shortcut icon" href="favicon.ico">
     <script>
-        if(window.top!==window.self){window.top.location=window.location};
+        if (window.top !== window.self) {
+            window.top.location = window.location
+        }
+        ;
     </script>
 </head>
 
 <body class="signin">
-    <div class="signinpanel">
-        <div class="row">
+<div class="signinpanel">
+    <div class="row">
+        <!--
             <div class="col-sm-7">
                 <div class="signin-info">
                     <div class="logopanel m-b">
                         <h1>
                             游e宝
-                            <!--<img alt=" 游e宝 " src="/logo.png">-->
+                            <img alt=" 游e宝 " src="/logo.png">
                         </h1>
                     </div>
                     <div class="m-b"></div>
@@ -43,24 +47,29 @@
                     <strong>还没有账号？ <a href="#">立即注册&raquo;</a></strong>
                 </div>
             </div>
-            <div class="col-sm-5">
+            -->
+        <div class="loginform">
+            <h1 id="title">Gaming Area</h1>
                 <form id="signupForm">
-                    <h4 class="no-margins">登录：</h4>
-                    <p class="m-t-md">游e宝后台管理系统</p>
-                    <input type="text"     name="username" class="form-control uname"     placeholder="用户名" value="admin"    />
-                    <input type="password" name="password" class="form-control pword m-b" placeholder="密码"   value="admin123" />
-                    <a href="#">忘记密码了？</a>
-                    <button class="btn btn-success btn-block">登录</button>
+                    <!--<h4 class="no-margins">Ruo Yi</h4>-->
+                    <!--<p class="m-t-md">游e宝后台管理系统</p>-->
+                    <input type="text" name="username" class="form-control uname" placeholder="Username"
+                           value="admin"/>
+                    <input type="password" name="password" class="form-control pword m-b" placeholder="Password"
+                           value="admin123"/>
+                    <a href="#" style="color: #fff;">Forgot password?</a>
+                    <button class="btn btn-success btn-block">Sign in</button>
                 </form>
-            </div>
-        </div>
-        <div class="signup-footer">
-            <div class="pull-left">
-                &copy; 2018 年5月第一版
-            </div>
         </div>
     </div>
-<script th:inline="javascript"> var ctx = [[@{/}]]; </script>
+    <!--div class="signup-footer">
+        <div class="pull-left">
+            &copy; 2018 年5月第一版
+        </div>
+    </div-->
+</div>
+<script th:inline="javascript"> var ctx = [[@{
+    /}]]; </script>
 <!-- 全局js -->
 <script src="/js/jquery.min.js"></script>
 <script src="/js/bootstrap.min.js"></script>

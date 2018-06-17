@@ -48,7 +48,6 @@ function getCheckeds() {
 
 function add() {
 	var productName = $("input[name='productName']").val();
-	var productSort = $("input[name='productSort']").val();
 	var remark = $("input[name='remark']").val();
 	var menuIds = getCheckeds();
 	$.ajax({
@@ -57,7 +56,6 @@ function add() {
 		url : "/system/product/save",
 		data : {
 			"productName": productName,
-			"productSort": productSort,
 			"remark": remark,
 			"menuIds": menuIds
 		},
